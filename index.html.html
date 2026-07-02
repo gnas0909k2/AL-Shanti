@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كريم الشنطي | Kareem Alshanti - المنصة الذكية لحل بنوك الأسئلة والامتحانات</title>
+    <style>
+        :root {
+            --primary-dark: #1e293b;
+            --primary-light: #2563eb;
+            --accent: #0f766e;
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            --card-bg: #ffffff;
+            --text-main: #0f172a;          
+            --success: #16a34a;            
+            --danger: #dc2626;             
+            --section-bg: #f8fafc;
+            --border-color: #e2e8f0;
+            --input-border: #cbd5e1;
+            --column-bg: #f1f5f9;
+            --option-bg: #ffffff;
+            --option-hover: #f1f5f9;       
+            --option-selected: rgba(37, 99, 235, 0.1); 
+            --watermark-color: rgba(15, 23, 42, 0.02);
+            --banner-bg: rgba(37, 99, 235, 0.06);
+            --banner-text: #1e40af;
+            --timer-bg: rgba(255, 255, 255, 0.95);
+            --highlight-bg: #fef08a; /* لون تمييز السؤال المهم */
+            --highlight-border: #eab308;
+        }
+
+        [data-theme="dark"] {
+            --primary-dark: #cbd5e1;       
+            --primary-light: #3b82f6;      
+            --accent: #2dd4bf;             
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); 
+            --card-bg: #1e293b;            
+            --text-main: #f8fafc;          
+            --section-bg: #0f172a;
+            --border-color: #334155;
+            --input-border: #475569;
+            --column-bg: #0f172a;
+            --option-bg: #1e293b;
+            --option-hover: #334155;       
+            --option-selected: rgba(59, 130, 246, 0.2); 
+            --watermark-color: rgba(255, 255, 255, 0.01);
+            --banner-bg: rgba(59, 130, 246, 0.1);
+            --banner-text: #93c5fd;
+            --timer-bg: rgba(30, 41, 59, 0.95);
+            --highlight-bg: #713f12;
+            --highlight-border: #facc15;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            margin: 0;
+            padding: 30px 20px 40px 20px;
+            color: var(--text-main);
+            position: relative;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body.timer-active { padding-top: 90px; }
+
+        body::before {
+            content: "كريم الشنطي  •  Kareem Alshanti  •  كريم الشنطي";
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 3.5rem; font-weight: bold;
+            color: var(--watermark-color);
+            z-index: -1; white-space: nowrap;
+            pointer-events: none; user-select: none;
+        }
+
+        .container {
+            max-width: 950px; margin: 0 auto;
+            background: var(--card-bg); padding: 40px; border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); position: relative;
+            transition: background-color 0.3s ease;
+        }
+
+        .theme-toggle-btn {
+            position: absolute; top: 20px; left: 20px; width: auto;
+            background-color: var(--primary-light); color: white !important;
+            padding: 8px 15px; font-size: 14px; font-weight: bold;
+        }
+
+        h1 { text-align: center; color: var(--text-main); margin-bottom: 5px; font-size: 30px; margin-top: 20px; }
+        .en-name { display: block; font-size: 20px; color: var(--text-main); opacity: 0.8; font-weight: 500; margin-top: 5px; }
+
+        .subtitle {
+            text-align: center; color: var(--primary-light); font-size: 16px; font-weight: 600;
+            margin-bottom: 30px; border-bottom: 3px solid var(--primary-light); padding-bottom: 15px;
+        }
+
+        .section {
+            margin-bottom: 30px; padding: 25px; border-radius: 12px;
+            background: var(--section-bg); border: 1px solid var(--border-color);
+        }
+
+        .form-group { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px dashed var(--border-color); }
+        .form-group:last-of-type { border-bottom: none; }
+        .sub-group { margin-top: 15px; padding-right: 20px; border-right: 3px solid var(--primary-light); }
+        
+        label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
+        
+        input[type="number"], select, textarea {
+            width: 100%; padding: 12px; border: 2px solid var(--input-border);
+            border-radius: 8px; box-sizing: border-box; font-size: 16px;
+            background: var(--card-bg); color: var(--text-main);
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+
+        input[type="number"]:focus, select:focus, textarea:focus { border-color: var(--primary-light); outline: none; }
+
+        .range-inputs { display: flex; gap: 15px; margin-top: 5px; }
+        .or-divider { font-size: 12px; font-weight: bold; color: var(--primary-light); margin: 8px 0; text-align: center; position: relative; }
+
+        .color-pickers-container {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+            margin-top: 15px; padding: 15px; background: var(--card-bg);
+            border-radius: 8px; border: 2px dashed var(--input-border);
+        }
+        .color-picker-wrapper { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .color-picker-wrapper input[type="color"] { width: 50px; height: 40px; border: none; cursor: pointer; background: transparent; }
+        .color-box { display: inline-block; width: 18px; height: 18px; border-radius: 50%; }
+
+        .flex-row { display: flex; gap: 15px; align-items: flex-end; }
+        .flex-row > div { flex: 1; }
+
+        button {
+            background-color: var(--primary-light); color: white; border: none;
+            padding: 14px 28px; font-size: 16px; font-weight: bold;
+            border-radius: 8px; cursor: pointer; width: 100%; transition: background 0.3s, transform 0.1s;
+        }
+        button:hover { opacity: 0.9; }
+        button:active { transform: scale(0.99); }
+
+        .timer-display {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+            font-size: 18px; font-weight: bold; display: flex; justify-content: center;
+            align-items: center; gap: 20px; color: var(--accent); background: var(--timer-bg);
+            padding: 15px 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); border-bottom: 2px solid var(--accent);
+        }
+
+        .timer-pause-btn { background-color: var(--primary-dark); color: var(--card-bg) !important; padding: 6px 16px; font-size: 13px; width: auto; }
+
+        .mode-control-panel {
+            background: var(--banner-bg); border: 1px solid var(--primary-light);
+            padding: 15px; border-radius: 8px; margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
+        }
+
+        .nav-buttons-container { display: flex; gap: 10px; width: auto; align-items: center; }
+        .nav-btn { width: auto; padding: 8px 20px; background-color: var(--primary-dark); }
+        
+        .question-indexer-bar {
+            display: flex; gap: 6px; flex-wrap: wrap; width: 100%; margin-top: 12px;
+            padding: 10px; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border-color);
+        }
+        .index-trigger-box {
+            min-width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;
+            border: 1px solid var(--input-border); border-radius: 6px; font-size: 13px; font-weight: bold;
+            cursor: pointer; background: var(--option-bg); color: var(--text-main); user-select: none; transition: all 0.2s ease;
+        }
+        .index-trigger-box:hover { background: var(--option-hover); border-color: var(--primary-light); }
+        .index-trigger-box.active-index { background: var(--primary-light) !important; color: white !important; border-color: var(--primary-light) !important; transform: scale(1.05); }
+
+        .question-row {
+            display: flex; flex-direction: column; padding: 20px;
+            border-bottom: 2px solid var(--border-color); border-radius: 8px;
+            margin-bottom: 15px; background: var(--card-bg); position: relative;
+            opacity: 1;
+            transform: translateY(0);
+            transition: background-color 0.3s ease, opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .question-row.fade-out {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .question-num { font-weight: bold; font-size: 17px; color: var(--text-main); }
+        .question-tag { font-size: 12px; padding: 4px 8px; border-radius: 4px; background: var(--input-border); font-weight: bold; }
+
+        .action-buttons-group { display: flex; gap: 8px; align-items: center; }
+        .flag-btn, .important-btn { background: var(--input-border); color: var(--text-main); padding: 6px 12px; font-size: 12px; border-radius: 6px; width: auto; }
+        .flagged { background: #eab308 !important; color: white !important; }
+        .flagged-row { border-left: 5px solid #eab308; }
+        
+        /* التنسيقات المخصصة لتمييز السؤال المهم */
+        .important-active { background: #facc15 !important; color: #0f172a !important; font-weight: bold; }
+        .important-highlighted-row { background-color: var(--highlight-bg) !important; border: 2px dashed var(--highlight-border) !important; }
+
+        .columns-container { display: flex; gap: 25px; flex-wrap: wrap; }
+        .column { flex: 1; min-width: 250px; background: var(--column-bg); padding: 15px; border-radius: 8px; transition: background-color 0.3s; }
+        
+        .options-container { display: flex; gap: 12px; flex-wrap: nowrap; margin-top: 12px; direction: rtl; }
+        .options-container.ltr-layout { direction: ltr !important; }
+        
+        .option-label {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            cursor: pointer; padding: 10px 14px; border-radius: 8px; 
+            border: 2px solid var(--input-border); background: var(--option-bg);
+            font-size: 14px; font-weight: 600; color: var(--text-main); flex: 1; text-align: center;
+        }
+        .option-label:hover { background: var(--option-hover); border-color: var(--primary-light); }
+        .option-label.selected-active { background: var(--option-selected) !important; border-color: var(--primary-light) !important; }
+
+        .correct-row { background-color: rgba(22, 163, 74, 0.08) !important; border-right: 5px solid var(--success) !important; }
+        .wrong-row { background-color: rgba(220, 38, 38, 0.08) !important; border-right: 5px solid var(--danger) !important; }
+
+        .error-log-box { margin-top: 15px; width: 100%; height: 60px; }
+        
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-content { background: var(--card-bg); padding: 30px; border-radius: 12px; max-width: 500px; width: 90%; text-align: center; }
+
+        .hidden { display: none !important; }
+        .result-box { font-size: 22px; font-weight: bold; text-align: center; padding: 25px; border-radius: 8px; margin-top: 20px; }
+        footer { text-align: center; margin-top: 30px; font-size: 13px; color: var(--text-main); opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+<div id="mindsetModal" class="modal-overlay">
+    <div class="modal-content">
+        <h4>🧠 تحليل البيانات المعرفية</h4>
+        <p>تتم الآن معالجة إجاباتك ومطابقتها خوارزمياً. الأخطاء هي مجرد معطيات تحليلية تُسهم في إعادة توجيه مسارك العلمي نحو الدقة والتفوق.</p>
+        <button onclick="closeModalAndShowResults()">بدء المعالجة واستخراج التقرير</button>
+    </div>
+</div>
+
+<div id="timerDisplay" class="timer-display hidden">
+    <span id="timerText">الوقت المتبقي: --:--</span>
+    <button id="pauseTimerBtn" class="timer-pause-btn" onclick="togglePauseTimer()">⏸️ إيقاف مؤقت</button>
+</div>
+
+<div class="container">
+    <button class="theme-toggle-btn" onclick="toggleTheme()">🌓 تبديل الوضع المريح</button>
+
+    <h1>كريم الشنطي <span class="en-name">Kareem Alshanti</span></h1>
+    <div class="subtitle">المنصة الذكية لحل وتدقيق بنوك الأسئلة والامتحانات الشاملة</div>
+
+    <div id="setupSection" class="section">
+        <h3>1. التهيئة الهيكلية وتحديد البيانات</h3>
+        
+        <div class="form-group">
+            <label>📝 أسئلة الاختيار من متعدد (MCQ):</label>
+            <div class="flex-row">
+                <div style="flex: 2;">
+                    <label style="font-size:13px; opacity:0.8;">تحديد النطاق البنيوي الهيكلي:</label>
+                    <div class="range-inputs">
+                        <input type="number" id="mcqStart" placeholder="من السؤال">
+                        <input type="number" id="mcqEnd" placeholder="إلى السؤال">
+                    </div>
+                    <div class="or-divider">─── أَوْ أدخل عدد الأسئلة الإجمالي مباشرة ───</div>
+                    <input type="number" id="mcqTotalCount" placeholder="مثال: 50 سؤال">
+                </div>
+                <div>
+                    <label style="font-size:13px; opacity:0.8;">نوع خيارات الإجابة:</label>
+                    <select id="qType" onchange="handleTypeChange()">
+                        <option value="letters">حروف عربية (أ - ب - ج - د)</option>
+                        <option value="english_letters">حروف إنجليزية (A - B - C - D)</option>
+                        <option value="colors">ألوان مخصصة (تحديد مرئي)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="customColorsContainer" class="color-pickers-container hidden">
+                <div class="color-picker-wrapper"><span>اللون 1</span><input type="color" id="customColor1" value="#dc2626"></div>
+                <div class="color-picker-wrapper"><span>اللون 2</span><input type="color" id="customColor2" value="#2563eb"></div>
+                <div class="color-picker-wrapper"><span>اللون 3</span><input type="color" id="customColor3" value="#16a34a"></div>
+                <div class="color-picker-wrapper"><span>اللون 4</span><input type="color" id="customColor4" value="#475569"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="hasTF">✔️ أسئلة صواب وخطأ (True/False):</label>
+            <select id="hasTF" onchange="toggleSubGroup('tfCountGroup', this.value)">
+                <option value="no">لا توجد أسئلة صواب وخطأ</option>
+                <option value="yes">نعم، تضمين أسئلة صواب وخطأ</option>
+            </select>
+            <div id="tfCountGroup" class="sub-group hidden">
+                <label style="font-size:13px; opacity:0.8;">تحديد النطاق أو العدد الكلي:</label>
+                <div class="range-inputs">
+                    <input type="number" id="tfStart" placeholder="من السؤال">
+                    <input type="number" id="tfEnd" placeholder="إلى السؤال">
+                </div>
+                <div class="or-divider">─── أَوْ أدخل عدد الأسئلة الإجمالي مباشرة ───</div>
+                <input type="number" id="tfTotalCount" placeholder="مثال: 10 أسئلة">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="hasWritten">✍️ أسئلة مقالية / كتابية (تدقيق خوارزمي مرن):</label>
+            <select id="hasWritten" onchange="toggleSubGroup('writtenCountGroup', this.value)">
+                <option value="no">لا توجد أسئلة كتابية</option>
+                <option value="yes">نعم، تضمين أسئلة كتابية</option>
+            </select>
+            <div id="writtenCountGroup" class="sub-group hidden">
+                <label style="font-size:13px; opacity:0.8;">تحديد النطاق أو العدد الكلي:</label>
+                <div class="range-inputs">
+                    <input type="number" id="writtenStart" placeholder="من السؤال">
+                    <input type="number" id="writtenEnd" placeholder="إلى السؤال">
+                </div>
+                <div class="or-divider">─── أَوْ أدخل عدد الأسئلة الإجمالي مباشرة ───</div>
+                <input type="number" id="writtenTotalCount" placeholder="مثال: 5 أسئلة">
+            </div>
+        </div>
+
+        <div class="form-group flex-row">
+            <div>
+                <label for="useTimer">⏱️ تفعيل المعيار الزمني?</label>
+                <select id="useTimer" onchange="toggleSubGroup('timerMinutesGroup', this.value)">
+                    <option value="no">لا، تقييم حر</option>
+                    <option value="yes">نعم، تفعيل العداد الزمني</option>
+                </select>
+            </div>
+            <div id="timerMinutesGroup" class="hidden" style="flex:1;">
+                <label for="timerMinutes">المدة بالدقائق:</label>
+                <input type="number" id="timerMinutes" min="1" value="30">
+            </div>
+        </div>
+        
+        <button onclick="generateExamSheet()">بدء التهيئة والانتقال لبيئة الحل</button>
+    </div>
+
+    <div id="examSection" class="section hidden">
+        <div class="mode-control-panel">
+            <div>
+                <label for="liveDisplayMode" style="display:inline; margin-left:10px;">🎛️ نمط العرض:</label>
+                <select id="liveDisplayMode" onchange="updateColumnsVisibility()" style="width:160px; display:inline-block; padding:5px;">
+                    <option value="both">الوضع المزدوج</option>
+                    <option value="student_only">وضع الاختبار</option>
+                    <option value="key_only">وضع التدقيق (النموذجية فقط)</option>
+                </select>
+            </div>
+            <div>
+                <label style="display:inline; margin-left:10px; font-weight:bold;">✨ نمط السؤال المنفرد:</label>
+                <select id="singleModeSelector" onchange="toggleSingleQuestionMode(this.value)" style="width:140px; display:inline-block; padding:5px;">
+                    <option value="off">إيقاف (الكل تحت بعض)</option>
+                    <option value="on">تفعيل (سؤال لكل شاشة)</option>
+                </select>
+            </div>
+            <div id="singleNavContainer" class="nav-buttons-container hidden">
+                <button type="button" class="nav-btn" onclick="navigateSingleQuestion(-1)">⬅️ السابق</button>
+                <button type="button" class="nav-btn" onclick="navigateSingleQuestion(1)">التالي ➡️</button>
+            </div>
+            
+            <div id="questionIndexerPanel" class="question-indexer-bar hidden"></div>
+        </div>
+
+        <h3>2. مساحة المعالجة وإدخال البيانات</h3>
+        <hr><br>
+        <div id="questionsContainer"></div>
+        <br>
+        <button id="submitExamBtn" onclick="triggerMindsetModal()" style="background-color: var(--success); color: white;">إنهاء الفحص وتشغيل خوارزميات المطابقة</button>
+    </div>
+
+    <div id="resultSection" class="section hidden">
+        <h3>3. التحليل الإحصائي والنتائج</h3>
+        <div id="resultOutput" class="result-box"></div>
+        <br>
+        <div class="flex-row">
+            <button onclick="exportReport()" style="background-color: #475569; color: white;">استخراج التقرير الفني للأخطاء</button>
+            <button onclick="resetApp()" style="background-color: #64748b; color: white;">إعادة الهيئة لجلسة جديدة</button>
+        </div>
+    </div>
+
+    <footer>الأسس الخوارزمية والهيكلية مبنية بدقة وعقلانية. © كريم الشنطي | Kareem Alshanti</footer>
+</div>
+
+<script>
+    const letters = ['أ', 'ب', 'ج', 'د'];
+    const english_letters = ['A', 'B', 'C', 'D'];
+    let timerInterval, totalSeconds = 0, isOvertime = false, overtimeSeconds = 0, isPaused = false;
+    
+    let questionsConfig = []; 
+    let isSingleModeActive = false;
+    let currentSingleIndex = 0; 
+    let isTransitioning = false;
+
+    window.onload = function() {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    };
+
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+    }
+
+    function handleTypeChange() {
+        const qType = document.getElementById('qType').value;
+        const colorsContainer = document.getElementById('customColorsContainer');
+        if (qType === 'colors') colorsContainer.classList.remove('hidden');
+        else colorsContainer.classList.add('hidden');
+    }
+
+    function toggleSubGroup(groupId, value) {
+        const group = document.getElementById(groupId);
+        if (value === 'yes') group.classList.remove('hidden');
+        else group.classList.add('hidden');
+    }
+
+    function updateColumnsVisibility() {
+        const currentMode = document.getElementById('liveDisplayMode').value;
+        const keyCols = document.querySelectorAll('.column-key-type');
+        const studentCols = document.querySelectorAll('.column-student-type');
+
+        document.getElementById('submitExamBtn').classList.remove('hidden');
+
+        keyCols.forEach(col => col.classList.toggle('hidden', currentMode === 'student_only'));
+        studentCols.forEach(col => col.classList.toggle('hidden', currentMode === 'key_only'));
+    }
+
+    function getRangeBoundaries(startId, endId, totalId, defaultStart = 1) {
+        const totalVal = parseInt(document.getElementById(totalId).value);
+        if (!isNaN(totalVal) && totalVal > 0) {
+            return { start: defaultStart, end: defaultStart + totalVal - 1 };
+        }
+        const startVal = parseInt(document.getElementById(startId).value);
+        const endVal = parseInt(document.getElementById(endId).value);
+        if (!isNaN(startVal) && !isNaN(endVal) && endVal >= startVal) {
+            return { start: startVal, end: endVal };
+        }
+        return null;
+    }
+
+    function generateExamSheet() {
+        const container = document.getElementById('questionsContainer');
+        container.innerHTML = '';
+        questionsConfig = [];
+        isOvertime = false; overtimeSeconds = 0; isPaused = false;
+
+        const mcqBounds = getRangeBoundaries('mcqStart', 'mcqEnd', 'mcqTotalCount', 1);
+        const qType = document.getElementById('qType').value;
+        let chosenColors = [];
+        if (qType === 'colors') {
+            chosenColors = [
+                document.getElementById('customColor1').value,
+                document.getElementById('customColor2').value,
+                document.getElementById('customColor3').value,
+                document.getElementById('customColor4').value
+            ];
+        }
+        
+        let globalNextStart = 1;
+
+        if (mcqBounds) {
+            for (let i = mcqBounds.start; i <= mcqBounds.end; i++) {
+                questionsConfig.push({ index: i, type: 'mcq' });
+                if (qType === 'colors') {
+                    createQuestionRow(i, 'اختيار من متعدد (ترقيم لوني)', 'mcq', chosenColors, true, false);
+                } else {
+                    let isEnglish = (qType === 'english_letters');
+                    createQuestionRow(i, 'اختيار من متعدد', 'mcq', isEnglish ? english_letters : letters, false, isEnglish);
+                }
+            }
+            globalNextStart = mcqBounds.end + 1;
+        }
+
+        const hasTF = document.getElementById('hasTF').value === 'yes';
+        if (hasTF) {
+            const tfBounds = getRangeBoundaries('tfStart', 'tfEnd', 'tfTotalCount', globalNextStart);
+            if (tfBounds) {
+                for (let i = tfBounds.start; i <= tfBounds.end; i++) {
+                    questionsConfig.push({ index: i, type: 'tf' });
+                    createQuestionRow(i, 'استدلال منطقي (صواب / خطأ)', 'tf', ['صح', 'خطأ'], false, false);
+                }
+                globalNextStart = tfBounds.end + 1;
+            }
+        }
+
+        const hasWritten = document.getElementById('hasWritten').value === 'yes';
+        if (hasWritten) {
+            const writtenBounds = getRangeBoundaries('writtenStart', 'writtenEnd', 'writtenTotalCount', globalNextStart);
+            if (writtenBounds) {
+                for (let i = writtenBounds.start; i <= writtenBounds.end; i++) {
+                    questionsConfig.push({ index: i, type: 'written' });
+                    createQuestionRow(i, 'معالجة نصية (سؤال مقالي)', 'written', null, false, false);
+                }
+            }
+        }
+
+        if (questionsConfig.length === 0) {
+            alert('خطأ في بناء النظام الهيكلي: الرجاء تحديد النطاق (من - إلى) أو إدخال عدد إجمالي صحيح للأسئلة لتوليد ورقة الفحص.');
+            return;
+        }
+
+        if (document.getElementById('useTimer').value === 'yes') {
+            const mins = parseInt(document.getElementById('timerMinutes').value) || 30;
+            totalSeconds = mins * 60;
+            document.body.classList.add('timer-active');
+            startTimer();
+        } else {
+            document.getElementById('timerDisplay').classList.add('hidden');
+            document.body.classList.remove('timer-active');
+        }
+
+        document.getElementById('setupSection').classList.add('hidden');
+        document.getElementById('examSection').classList.remove('hidden');
+        
+        document.getElementById('singleModeSelector').value = 'off';
+        isSingleModeActive = false;
+        currentSingleIndex = 0;
+        document.getElementById('singleNavContainer').classList.add('hidden');
+        document.getElementById('questionIndexerPanel').classList.add('hidden');
+
+        buildQuickIndexerBar();
+        updateColumnsVisibility();
+    }
+
+    function buildQuickIndexerBar() {
+        const bar = document.getElementById('questionIndexerPanel');
+        bar.innerHTML = '';
+        questionsConfig.forEach((q, idx) => {
+            let box = document.createElement('div');
+            box.className = 'index-trigger-box';
+            box.id = `index-box-${idx}`;
+            box.innerText = q.index;
+            box.onclick = function() {
+                jumpToQuestionIndex(idx);
+            };
+            bar.appendChild(box);
+        });
+    }
+
+    function createQuestionRow(qNum, typeLabel, type, options, isColorMode = false, isEnglish = false) {
+        const container = document.getElementById('questionsContainer');
+        
+        let row = document.createElement('div');
+        row.className = 'question-row';
+        row.id = `q-row-${qNum}`;
+
+        let header = document.createElement('div');
+        header.className = 'question-header';
+        header.innerHTML = `
+            <div>
+                <span class="question-num">المحور رقم (${qNum})</span>
+                <span class="question-tag">${typeLabel}</span>
+            </div>
+        `;
+
+        let actionGroup = document.createElement('div');
+        actionGroup.className = 'action-buttons-group';
+
+        // زر التمييز كـسؤال مهم بلون أصفر
+        let importantBtn = document.createElement('button');
+        importantBtn.className = 'important-btn';
+        importantBtn.type = 'button';
+        importantBtn.innerText = '🌟 سؤال مهم';
+        importantBtn.onclick = function() {
+            this.classList.toggle('important-active');
+            row.classList.toggle('important-highlighted-row');
+        };
+
+        let flagBtn = document.createElement('button');
+        flagBtn.className = 'flag-btn';
+        flagBtn.type = 'button';
+        flagBtn.innerText = '🚩 إشارة مرجعية';
+        flagBtn.onclick = function() {
+            this.classList.toggle('flagged');
+            row.classList.toggle('flagged-row');
+        };
+
+        actionGroup.appendChild(importantBtn);
+        actionGroup.appendChild(flagBtn);
+        header.appendChild(actionGroup);
+        row.appendChild(header);
+
+        let columnsContainer = document.createElement('div');
+        columnsContainer.className = 'columns-container';
+
+        let keyDiv = document.createElement('div');
+        keyDiv.className = 'column column-key-type';
+        
+        let studentDiv = document.createElement('div');
+        studentDiv.className = 'column column-student-type';
+
+        if (type === 'mcq' || type === 'tf') {
+            keyDiv.innerHTML = `<strong>البيانات النموذجية (مفتاح الحل):</strong>`;
+            studentDiv.innerHTML = `<strong>البيانات المدخلة (إجابة الطالب):</strong>`;
+            
+            let keyOpts = document.createElement('div'); 
+            keyOpts.className = 'options-container' + (isEnglish ? ' ltr-layout' : '');
+            
+            let studentOpts = document.createElement('div'); 
+            studentOpts.className = 'options-container' + (isEnglish ? ' ltr-layout' : '');
+
+            options.forEach((opt, idx) => {
+                if (isColorMode) {
+                    let labelName = `المعرف ${idx + 1}`;
+                    keyOpts.appendChild(createRadioElement(qNum, 'key', opt, labelName, opt, false)); 
+                    studentOpts.appendChild(createRadioElement(qNum, 'student', opt, labelName, opt, true)); 
+                } else {
+                    keyOpts.appendChild(createRadioElement(qNum, 'key', opt, opt, null, false));
+                    studentOpts.appendChild(createRadioElement(qNum, 'student', opt, opt, null, true));
+                }
+            });
+            keyDiv.appendChild(keyOpts);
+            studentDiv.appendChild(studentOpts);
+        } else if (type === 'written') {
+            keyDiv.innerHTML = `<strong>البنية المرجعية (النص النموذجي):</strong>
+                               <textarea id="q-${qNum}-key-text" placeholder="أدخل النص المرجعي هنا لتمكين المعالجة الخوارزمية..." style="margin-top:10px; height:80px;"></textarea>`;
+            studentDiv.innerHTML = `<strong>المدخلات التحليلية (إجابة الطالب):</strong>
+                                   <textarea id="q-${qNum}-student-text" placeholder="أدخل النص المراد مطابقته خوارزمياً..." style="margin-top:10px; height:80px;"></textarea>`;
+        }
+
+        columnsContainer.appendChild(keyDiv);
+        columnsContainer.appendChild(studentDiv);
+        row.appendChild(columnsContainer);
+        container.appendChild(row);
+    }
+
+    function createRadioElement(qNum, type, value, labelText, colorCode = null, isStudentSide = false) {
+        let label = document.createElement('label');
+        label.className = 'option-label';
+        let radio = document.createElement('input');
+        radio.type = 'radio'; radio.name = `q-${qNum}-${type}`; radio.value = value; radio.style.display = 'none';
+        label.appendChild(radio);
+
+        if (colorCode) {
+            let box = document.createElement('span');
+            box.className = 'color-box';
+            box.style.backgroundColor = colorCode;
+            box.style.border = '1px solid rgba(0,0,0,0.15)';
+            label.appendChild(box);
+        } else {
+            label.appendChild(document.createTextNode(labelText));
+        }
+
+        radio.addEventListener('change', function() {
+            let siblings = label.parentElement.getElementsByClassName('option-label');
+            for(let sib of siblings) sib.classList.remove('selected-active');
+            if(this.checked) label.classList.add('selected-active');
+
+            const displayMode = document.getElementById('liveDisplayMode').value;
+            let triggersTransition = false;
+            
+            if (isStudentSide && (displayMode === 'student_only' || displayMode === 'both')) {
+                triggersTransition = true;
+            } else if (!isStudentSide && displayMode === 'key_only') {
+                triggersTransition = true;
+            }
+
+            if (isSingleModeActive && !isTransitioning && triggersTransition) {
+                let nextIndex = currentSingleIndex + 1;
+                if (nextIndex < questionsConfig.length) {
+                    isTransitioning = true;
+                    let currentRow = document.getElementById(`q-row-${questionsConfig[currentSingleIndex].index}`);
+                    currentRow.classList.add('fade-out');
+                    
+                    setTimeout(() => {
+                        currentRow.classList.add('hidden');
+                        currentRow.classList.remove('fade-out');
+                        
+                        currentSingleIndex = nextIndex;
+                        let nextRow = document.getElementById(`q-row-${questionsConfig[currentSingleIndex].index}`);
+                        
+                        nextRow.classList.add('fade-out');
+                        nextRow.classList.remove('hidden');
+                        void nextRow.offsetWidth; 
+                        nextRow.classList.remove('fade-out');
+                        
+                        updateActiveIndexHighlight();
+                        isTransitioning = false;
+                    }, 250);
+                }
+            }
+        });
+        return label;
+    }
+
+    function toggleSingleQuestionMode(mode) {
+        const indexer = document.getElementById('questionIndexerPanel');
+        if (mode === 'on') {
+            isSingleModeActive = true;
+            document.getElementById('singleNavContainer').classList.remove('hidden');
+            indexer.classList.remove('hidden');
+            renderSingleQuestionVisibility();
+        } else {
+            isSingleModeActive = false;
+            document.getElementById('singleNavContainer').classList.add('hidden');
+            indexer.classList.add('hidden');
+            questionsConfig.forEach(q => {
+                let row = document.getElementById(`q-row-${q.index}`);
+                row.classList.remove('hidden');
+                row.classList.remove('fade-out');
+            });
+        }
+    }
+
+    function renderSingleQuestionVisibility() {
+        if (!isSingleModeActive || questionsConfig.length === 0) return;
+        questionsConfig.forEach((q, idx) => {
+            let row = document.getElementById(`q-row-${q.index}`);
+            row.classList.remove('fade-out');
+            if (idx === currentSingleIndex) {
+                row.classList.remove('hidden');
+            } else {
+                row.classList.add('hidden');
+            }
+        });
+        updateActiveIndexHighlight();
+    }
+
+    function jumpToQuestionIndex(targetIdx) {
+        if (!isSingleModeActive || isTransitioning || targetIdx === currentSingleIndex) return;
+        isTransitioning = true;
+        
+        let currentRow = document.getElementById(`q-row-${questionsConfig[currentSingleIndex].index}`);
+        currentRow.classList.add('fade-out');
+        
+        setTimeout(() => {
+            currentRow.classList.add('hidden');
+            currentRow.classList.remove('fade-out');
+            
+            currentSingleIndex = targetIdx;
+            let nextRow = document.getElementById(`q-row-${questionsConfig[currentSingleIndex].index}`);
+            nextRow.classList.add('fade-out');
+            nextRow.classList.remove('hidden');
+            void nextRow.offsetWidth;
+            nextRow.classList.remove('fade-out');
+            
+            updateActiveIndexHighlight();
+            isTransitioning = false;
+        }, 200);
+    }
+
+    function updateActiveIndexHighlight() {
+        const boxes = document.querySelectorAll('.index-trigger-box');
+        boxes.forEach((box, idx) => {
+            box.classList.toggle('active-index', idx === currentSingleIndex);
+        });
+    }
+
+    function navigateSingleQuestion(direction) {
+        if (!isSingleModeActive || isTransitioning) return;
+        let newIndex = currentSingleIndex + direction;
+        if (newIndex >= 0 && newIndex < questionsConfig.length) {
+            jumpToQuestionIndex(newIndex);
+        } else if (newIndex >= questionsConfig.length) {
+            alert("لقد وصلت إلى المحور الأخير في ورقة الفحص الحالية.");
+        }
+    }
+
+    function startTimer() {
+        const display = document.getElementById('timerDisplay');
+        const timerText = document.getElementById('timerText');
+        display.classList.remove('hidden');
+        
+        timerInterval = setInterval(() => {
+            if (isPaused) return;
+            if (!isOvertime) {
+                let mins = Math.floor(totalSeconds / 60);
+                let secs = totalSeconds % 60;
+                timerText.innerText = `التوقيت المتبقي: ${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+                if (totalSeconds <= 0) { isOvertime = true; display.classList.add('timer-overtime'); }
+                totalSeconds--;
+            } else {
+                overtimeSeconds++;
+                let mins = Math.floor(overtimeSeconds / 60);
+                let secs = overtimeSeconds % 60;
+                timerText.innerText = `⚠️ انقضى الوقت المخصص (+${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs})`;
+            }
+        }, 1000);
+    }
+
+    function togglePauseTimer() {
+        const pauseBtn = document.getElementById('pauseTimerBtn');
+        isPaused = !isPaused;
+        pauseBtn.innerText = isPaused ? "▶️ استئناف السيرورة" : "⏸️ إيقاف مؤقت";
+    }
+
+    function triggerMindsetModal() { document.getElementById('mindsetModal').classList.add('active'); }
+    function closeModalAndShowResults() { document.getElementById('mindsetModal').classList.remove('active'); gradeExam(); }
+
+    function normalizeText(text) {
+        if (!text) return "";
+        return text
+            .trim()
+            .toLowerCase()
+            .replace(/[أإآ]/g, "ا")       
+            .replace(/ة/g, "ه")          
+            .replace(/ى/g, "ي")          
+            .replace(/[\u064B-\u0652]/g, "") 
+            .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()؟?،]/g, "") 
+            .replace(/\s+/g, " ");       
+    }
+
+    function getSimilarityRatio(str1, str2) {
+        const s1 = normalizeText(str1);
+        const s2 = normalizeText(str2);
+
+        if (s1 === s2) return 1.0;
+        if (s1.length < 2 || s2.length < 2) return 0.0;
+
+        const getBigrams = str => {
+            const bigrams = new Set();
+            for (let i = 0; i < str.length - 1; i++) {
+                bigrams.add(str.substring(i, i + 2));
+            }
+            return bigrams;
+        };
+
+        const bigrams1 = getBigrams(s1);
+        const bigrams2 = getBigrams(s2);
+
+        let intersection = 0;
+        bigrams1.forEach(bit => {
+            if (bigrams2.has(bit)) intersection++;
+        });
+
+        return (2.0 * intersection) / (bigrams1.size + bigrams2.size);
+    }
+
+    function gradeExam() {
+        clearInterval(timerInterval);
+        document.getElementById('timerDisplay').classList.add('hidden');
+        document.body.classList.remove('timer-active');
+        
+        document.getElementById('singleModeSelector').value = 'off';
+        toggleSingleQuestionMode('off');
+        document.getElementById('liveDisplayMode').value = 'both';
+
+        let totalQuestionsCount = questionsConfig.length;
+        let score = 0;
+
+        questionsConfig.forEach(q => {
+            let row = document.getElementById(`q-row-${q.index}`);
+            let isCorrect = false;
+            let similarityScore = 0;
+
+            if (q.type === 'mcq' || q.type === 'tf') {
+                let keySel = document.querySelector(`input[name="q-${q.index}-key"]:checked`);
+                let studentSel = document.querySelector(`input[name="q-${q.index}-student"]:checked`);
+                if (keySel && studentSel && keySel.value === studentSel.value) isCorrect = true;
+                
+            } else if (q.type === 'written') {
+                let keyText = document.getElementById(`q-${q.index}-key-text`).value;
+                let studentText = document.getElementById(`q-${q.index}-student-text`).value;
+                
+                if (keyText.trim() !== "" && studentText.trim() !== "") {
+                    similarityScore = getSimilarityRatio(keyText, studentText);
+                    if (similarityScore >= 0.70) isCorrect = true;
+
+                    let simNote = document.getElementById(`sim-note-${q.index}`);
+                    if (!simNote) {
+                        simNote = document.createElement('div');
+                        simNote.id = `sim-note-${q.index}`;
+                        simNote.style = "margin-top: 15px; font-size: 14px; font-weight: bold; border-top: 1px dashed var(--border-color); padding-top: 10px;";
+                        row.appendChild(simNote);
+                    }
+                    
+                    let percentage = (similarityScore * 100).toFixed(1);
+                    if (isCorrect) {
+                        simNote.style.color = "var(--success)";
+                        simNote.innerText = `✔️ تقييم الخوارزمية: تم قبول المضمون بتطابق هيكلي بلغ (${percentage}%)`;
+                    } else {
+                        simNote.style.color = "var(--danger)";
+                        simNote.innerText = `❌ تقييم الخوارزمية: رفض خوارزمي. التطابق (${percentage}%) أقل من المعيار المطلوب (70%)`;
+                    }
+                }
+            }
+
+            // إزالة تنسيق التمييز (اللون الأصفر) عند التصحيح لعرض النتيجة النهائية (أخضر/أحمر) بوضوح
+            row.classList.remove('important-highlighted-row');
+
+            if (isCorrect) {
+                score++;
+                row.className = 'question-row correct-row';
+            } else {
+                row.className = 'question-row wrong-row';
+                if (!document.getElementById(`error-log-${q.index}`)) {
+                    let textLog = document.createElement('textarea');
+                    textLog.id = `error-log-${q.index}`;
+                    textLog.className = 'error-log-box';
+                    textLog.placeholder = '💡 وثّق هنا التفسير المنطقي للقصور المعرفي لتحليله لاحقاً...';
+                    row.appendChild(textLog);
+                }
+            }
+        });
+
+        const resultSection = document.getElementById('resultSection');
+        const resultOutput = document.getElementById('resultOutput');
+        resultSection.classList.remove('hidden');
+
+        let percentage = ((score / totalQuestionsCount) * 100).toFixed(1);
+        resultOutput.style.backgroundColor = percentage >= 50 ? 'rgba(22, 163, 74, 0.1)' : 'rgba(220, 38, 38, 0.1)';
+        resultOutput.innerHTML = `معامل الكفاءة النهائي: ${score} من ${totalQuestionsCount} (${percentage}%)`;
+        
+        window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+    }
+
+    function exportReport() {
+        let textContent = "=== التقرير الفني للتباينات والأخطاء البنيوية ===\n\n";
+        questionsConfig.forEach(q => {
+            let logBox = document.getElementById(`error-log-${q.index}`);
+            if (logBox && logBox.value.trim() !== "") {
+                textContent += `المحور التحليلي رقم (${q.index}) [نوع البيانات: ${q.type}]:\nالتشخيص المنطقي للخطأ: ${logBox.value}\n-----------------------\n`;
+            }
+        });
+        if(!textContent.includes("المحور التحليلي")) textContent += "توافق معياري ممتاز (100%). لا توجد فجوات تستدعي التوثيق.";
+
+        let blob = new Blob([textContent], {type: "text/plain;charset=utf-8"});
+        let link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "التقرير_التحليلي_للتدقيق.txt";
+        link.click();
+    }
+
+    function resetApp() { location.reload(); }
+</script>
+
+</body>
+</html>
